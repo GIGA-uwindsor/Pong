@@ -4,7 +4,7 @@ function GameScene(state, assets) {
 
 GameScene.prototype = {
   _onBegin: function (director) {
-    this.getState().addEntity(new AwesomeCircle("#FF0000"));
+    this.getState().addEntity(new Ball(100,100));
   },
 }
 
