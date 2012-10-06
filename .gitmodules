@@ -1,3 +1,3 @@
-[submodule "Pub/lib/GFW"]
-	path = Pub/lib/GFW
+[submodule "GFW"]
+	path = pub/lib/GFW
 	url = git://github.com/erisco/GFW.git
