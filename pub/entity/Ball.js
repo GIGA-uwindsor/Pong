@@ -1,10 +1,10 @@
 /*  
   Ball Design:
     + position (X/Y property, setPosition)
-    + bounding circle (currently treated as bounding box in update)
-    + velocity (VX/VY property, setVelocity, setVelocityMultiplier, implemented in update)
+    + bounding circle (Radius property can be used by colliders)
+    + velocity (VX/VY property, setVelocity, mulVelocityX/Y, implemented in update)
     + graphic (currently using a circle with Radius property)
-    - if veloc.x is zero, correct to non-zero (done)
+    - if veloc.x is zero, correct to non-zero (done, also checks if veloc.x is too slow, since 0.001 is still non-zero)
 */
 function Ball(x,y) {
   this._GFW_Entity_Initialize();
