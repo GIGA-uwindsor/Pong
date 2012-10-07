@@ -1,9 +1,17 @@
+/*  
+  Ball Design:
+    + position (X/Y property, setPosition)
+    + bounding circle (currently treated as bounding box in update)
+    + velocity (VX/VY property, setVelocity, setVelocityMultiplier, implemented in update)
+    + graphic (currently using a circle with Radius property)
+    - if veloc.x is zero, correct to non-zero (done)
+*/
 function Ball(x,y) {
   this._GFW_Entity_Initialize();
   this.setPosition(x,y);
-  this.setVelocity(.5,1);
+  this.setVelocity( (Math.random() < 0.5 ? 1 : -1), (Math.random() < 0.5 ? 1 : -1));
   this.setBounds(640,480);
-  this.setRadius(10);
+  this.setRadius(200);
 }
 
 Ball.prototype = {
@@ -21,7 +29,6 @@ Ball.prototype = {
     */
   hitPaddle: function (paddle,direction) {
     // @TODO
-    // - Invert the X velocity
     // - Change the Y velocity based on the direction the paddle was moving.
   },
   
@@ -72,6 +79,12 @@ Ball.prototype = {
 /* CALLBACKS */  
   /** UPDATE */
   update: function (updateParams) {
+    
+    // Get the delta time since last update
+    var delta = updateParams.getTime().getDelta();
+    if ( Math.abs(delta) > 10000 ) // Return if delta is bugged
+      return;
+      
     // Localize variables
     var x = this.getX();
     var y = this.getY();
@@ -87,20 +100,17 @@ Ball.prototype = {
     var right   = x + r;
     var bottom  = y + r;
     
-    // Get the delta time since last update
-    var delta = updateParams.getTime().getDelta();
-    if ( Math.abs(delta) > 10000 )
-      return;
-    
     //console.log("delta: %d", delta);
 
+    /** @TODO: Collision handled by BallSideCollider */
     // Bounce off of the walls
     if ( left <= 0 || right >= boundX ) // left/right
       this.setVX( (left <= 0 ? 1 : -1) * Math.abs(this.getVX()) );
 
     if ( top <= 0 || bottom >= boundY ) // top/bottom
       this.setVY( (top <= 0 ? 1 : -1) * Math.abs(this.getVY()) );
-
+    
+    
     // Update the ball's position
     this.setPosition( x + this.getVX()*delta/10, y + this.getVY()*delta/10 );
     
@@ -122,15 +132,26 @@ Ball.prototype = {
 
   /** DRAW */
   draw: function (ctx, assets) {
+    // localize some variables
+    var bx = this.getBoundX();
+    var by = this.getBoundY();
+    var w = ctx.canvas.width;
+    var h = ctx.canvas.height;
+    
     // Project the ball onto the drawing canvas
-    var x = (this.getX() / this.getBoundX()) * ctx.canvas.width;
-    var y = (this.getY() / this.getBoundY()) * ctx.canvas.height;
+    var x = (this.getX() / bx) * w;
+    var y = (this.getY() / by) * h;
+    var r = (this.getRadius() / Math.min(bx,by)) * Math.min(w,h);
     
     // Code copied/modified from AwesomeCircle
-    var startAngle = 0;
-    var endAngle = Math.PI * 2;
     ctx.beginPath();
-    ctx.arc(x, y, this.getRadius(), startAngle, endAngle, true);
+    ctx.arc(x, y, r, 0, 2*Math.PI);
+    
+    var grd = ctx.createRadialGradient(x,y,0, x,y,r);
+    grd.addColorStop(0,"blue");
+    grd.addColorStop(1,"black");
+    
+    ctx.fillStyle=grd;
     ctx.fill();
   }
 
