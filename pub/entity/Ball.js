@@ -8,53 +8,69 @@ function Ball(x,y) {
 
 Ball.prototype = {
 /* FUNCTIONALITY */
-  // Tells the ball that it was hit by a paddle.
-  // paddle:
-  //    0: hit left paddle, move ball right
-  //    1: hit right paddle, move ball left
-  // direction:
-  //   -1: paddle was moving up
-  //    0: paddle was not moving
-  //    1: paddle was moving down
+  /** 
+    * Tells the ball that it was hit by a paddle.
+    * @param paddle
+    *   0: hit left paddle, moves ball right
+    *   1: hit right paddle, moves ball left
+    *
+    * @param direction
+    *  -1: paddle was moving up
+    *   0: paddle was not moving
+    *   1: paddle was moving down
+    */
   hitPaddle: function (paddle,direction) {
     // @TODO
     // - Invert the X velocity
     // - Change the Y velocity based on the direction the paddle was moving.
   },
   
-  // Tells the ball to move either left or right at the given multiple of its current velocity.
-  //
-  // multiplier: The multiplier to apply to the ball's current X velocity.
-  //
-  // absolute: Boolean specifying the behaviour of this function.
-  //      true = Multiplier is absolute. A negative multiplier moves the ball left,
-  //              and a positive multiplier moves it right.
-  //      false = Multiplier is relative. A negative multiplier moves the ball in the
-  //              opposite direction it is currently moving.
+  /**
+    * Tells the ball to move either left or right at the given multiple of its current velocity.
+    *
+    * @param multiplier
+    *   The multiplier to apply to the ball's current X velocity.
+    *
+    * @param absolute
+    *   Boolean value specifying the behaviour of this function.
+    *     true  = Multiplier is absolute. A negative multiplier moves the ball left,
+    *             and a positive multiplier moves it right.
+    *     false = Multiplier is relative. A negative multiplier moves the ball in the
+    *             opposite direction it is currently moving.
+    */
   setVelocityMultiplier: function(multiplier, absolute) {
     var vx = absolute ? Math.abs(this.getVX()) : this.getVX();
     this.setVX(vx * multiplier);    
   },
   
 /* CONVENIENCE */
-  // Sets the position of the Ball
+  /**
+    * Sets the position of the ball.
+    */
   setPosition: function (x,y) {
     this.setX(x);
     this.setY(y);
   },
-  // Sets the velocity of the Ball, negative value goes left/up
+  
+  /**
+    * Sets the velocity of the ball. Positive values indicate the ball is moving
+    * (right,down) and negative values indicate the ball is moving (left,up).
+    */
   setVelocity: function (x,y) {
     this.setVX(x);
     this.setVY(y);
   },
-  // Sets the bounds of the ball, this is stretched over the canvas
+  
+  /**
+    * Sets the virtual bounding box of the ball to (0,0,x,y).
+    */
   setBounds: function (x,y) {
     this.setBoundX(x);
     this.setBoundY(y);
   },
 
 /* CALLBACKS */  
-  // UPDATE
+  /** UPDATE */
   update: function (updateParams) {
     // Localize variables
     var x = this.getX();
@@ -104,7 +120,7 @@ Ball.prototype = {
     }
   },
 
-  // DRAW
+  /** DRAW */
   draw: function (ctx, assets) {
     // Project the ball onto the drawing canvas
     var x = (this.getX() / this.getBoundX()) * ctx.canvas.width;
