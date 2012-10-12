@@ -20,7 +20,7 @@ Paddle.prototype = {
   },
   setY: function (value) {
     this.getRect().setY(value);
-  }
+  },
   
   /* width */
   getWidth: function () {
