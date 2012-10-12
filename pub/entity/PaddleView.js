@@ -18,7 +18,7 @@ PaddleView.prototype = {
     this.setTop(top);
     this.setRight(right);
     this.setBottom(bottom);
-  }
+  },
 
   draw: function (ctx, assets) 
   {
