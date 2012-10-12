@@ -26,7 +26,7 @@ function GameMaster(state) {
   //* new BallPaddleCollider(ball, aiPaddle);
   var aiPaddleSideCldr =
     new PaddleSideCollider(aiPaddle, playingField);
-  var aiPaddleCtrl = new AIPaddleController(aiPaddle);
+  var aiPaddleCtrl = new AIPaddleController(ball, aiPaddle);
   var aiPaddleView = new PaddleView(aiPaddle, "#00FF00");
   
   state.addEntity(playingField);
