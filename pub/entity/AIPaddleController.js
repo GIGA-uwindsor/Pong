@@ -20,13 +20,13 @@ AIPaddleController.prototype = {
     if ( t < 1 ) // correction
       t = 1;
     
-    var currentY = 0; //__paddleRef.getY();
+    var currentY = __paddleRef.getY();
     var ballY = __ballRef.getY();
     
     var diff = ballY/t - currentY/t;
     
-    //if ( diff != 0 )
-      //__paddleRef.move(diff);
+    if ( diff != 0 )
+      __paddleRef.setY(ballY); //__paddleRef.move(diff);
   },
 
 }
