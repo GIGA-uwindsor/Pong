@@ -5,10 +5,10 @@
     
     Refs: Ball, PlayingField
 */
-function BallSideCollider(ball,width,height) {
+function BallSideCollider(ballRef,width,height) {
   this._GFW_Entity_Initialize();
   this.setFieldSize(width,height);
-  this.__ballRef = ball;
+  this.__ballRef = ballRef;
 }
 
 BallSideCollider.prototype = {
