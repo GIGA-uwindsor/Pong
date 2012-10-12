@@ -1,4 +1,5 @@
 function GameMaster(state) {
+  this._GFW_Entity_Initialize();
 
   /*
    * Initialize game entities

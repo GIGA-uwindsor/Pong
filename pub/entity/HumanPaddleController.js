@@ -1,4 +1,5 @@
 function HumanPaddleController(paddle) {
+  this._GFW_Entity_Initialize();
   this.set__paddle(paddle);
 }
 
