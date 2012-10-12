@@ -1,36 +1,30 @@
 /*  
   BallSideCollider Design:
-    - Hit tests ball and the side (Tests against bounding box [0,0,width,height], where width and height are provided on object creation)
+    - Hit tests ball and the side (Tests against field)
     - Ball-side collision resolution (Correctly sets ball's velocity when side is hit)
     
     Refs: Ball, PlayingField
 */
-function BallSideCollider(ballRef,width,height) {
+function BallSideCollider(ballRef,playingFieldRef) {
   this._GFW_Entity_Initialize();
-  this.setFieldSize(width,height);
-  this.__ballRef = ballRef;
+  this.__ballRef  = ballRef;
+  this.__fieldRef = playingFieldRef;
 }
 
 BallSideCollider.prototype = {
-  __ballRef: undefined,
-  
-/* CONVENIENCE */
-  /** 
-    * Sets the size of the field that the ball will be bounded to.
-    */
-  setFieldSize: function(width,height) {
-    this.setFieldWidth(width);
-    this.setFieldHeight(height);
-  },
+  __ballRef:  undefined,
+  __fieldRef: undefined,
 
 /* CALLBACKS */
   /** UPDATE */
   update: function (updateParams) {
-    if ( this.__ballRef == undefined ) // Ignore if there is no ball
+    if ( this.__ballRef == undefined || this.__fieldRef == undefined ) // Ignore if there is no ball
       return;
     
     // Localize variables
-    var ball = this.__ballRef;
+    var ball  = this.__ballRef;
+    var field = this.__fieldRef;
+    
     var x = ball.getX();
     var y = ball.getY();
     var r = ball.getRadius();
@@ -42,17 +36,13 @@ BallSideCollider.prototype = {
     var bottom  = y + r;
 
     // Bounce off of the walls
-    if ( left <= 0 || right >= this.getFieldWidth() ) // left/right
-      ball.mulVelocityX( (left <= 0 ? 1 : -1) );
+    if ( left < field.getX() || right > field.getWidth() ) // left/right
+      ball.mulVelocityX( (left < field.getX() ? 1 : -1) );
 
-    if ( top <= 0 || bottom >= this.getFieldHeight() ) // top/bottom
-      ball.mulVelocityY( (top <= 0 ? 1 : -1) );
+    if ( top < field.getY() || bottom > field.getHeight() ) // top/bottom
+      ball.mulVelocityY( (top < field.getY() ? 1 : -1) );
   },
   
 }
-
-// Field size
-GFW_Property(BallSideCollider, "FieldWidth");
-GFW_Property(BallSideCollider, "FieldHeight");
 
 GFW_mixin(BallSideCollider, GFW_Entity, ["update"]);
