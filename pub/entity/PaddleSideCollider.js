@@ -5,13 +5,13 @@
     
     Refs: Paddle, PlayingField
 */
-function BallSideCollider(paddleRef,playingFieldRef) {
+function PaddleSideCollider(paddleRef,playingFieldRef) {
   this._GFW_Entity_Initialize();
   this.__paddleRef  = paddleRef;
   this.__fieldRef   = playingFieldRef;
 }
 
-BallSideCollider.prototype = {
+PaddleSideCollider.prototype = {
   __paddleRef: undefined,
   __fieldRef:  undefined,
   
@@ -36,4 +36,4 @@ BallSideCollider.prototype = {
   
 }
 
-GFW_mixin(BallSideCollider, GFW_Entity, ["update"]);
+GFW_mixin(PaddleSideCollider, GFW_Entity, ["update"]);
