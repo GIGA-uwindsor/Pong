@@ -46,7 +46,8 @@ function GameMaster(state) {
   /*
    * 
    */
-   
+  
+  this.set__PlayingField(playingField);
   this.set__Ball(ball);
   this.set__HumanPaddle(humanPaddle);
   this.set__AIPaddle(aiPaddle);
