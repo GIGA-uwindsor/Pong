@@ -2,40 +2,30 @@
   PaddleView design:
     + colour
 */
-function PaddleView(left,top,right,bottom,color) {
+function PaddleView(paddleRef,color) {
   this._GFW_Entity_Initialize();
-  this.setRect(left,top,right,bottom);
+  this.__paddleRef = paddleRef;
   this.setColor(color);
 }
 
 PaddleView.prototype = {
-
-  /** Sets the rectangle for which the view should be drawn.
-  */
-  setRect: function(left,top,right,bottom)
-  {
-    this.setLeft(left);
-    this.setTop(top);
-    this.setRight(right);
-    this.setBottom(bottom);
-  },
+  __paddleRef: undefined,
 
   draw: function (ctx, assets) 
   {
+    if ( this.__paddleRef == undefined )
+      return;
+      
+    var paddle = this.__paddleRef;
+    
     ctx.fillStyle = this.getColor();
-    ctx.fillRect( this.getLeft(),
-                  this.getTop(),
-                  this.getRight(),
-                  this.getBottom() );
+    ctx.fillRect( paddle.getX(),
+                  paddle.getY(),
+                  paddle.getRight(),
+                  paddle.getBottom() );
   }
 
 }
-
-// Drawing bounds
-GFW_Property(PaddleView, "Left");
-GFW_Property(PaddleView, "Top");
-GFW_Property(PaddleView, "Right");
-GFW_Property(PaddleView, "Bottom");
 
 // Colour
 GFW_Property(PaddleView, "Color");
