@@ -8,20 +8,22 @@ function GameMaster(state) {
   // TODO: extract numbers into some JSON config
   var playingField = new PlayingField(0, 0, 600, 300);
   var ball = new Ball(300, 200);
-  var humanPaddle = new Paddle(25, 100);
-  var aiPaddle = new Paddle(500, 100);
+  var humanPaddle = new Paddle(25, 100, 25, 100);
+  var aiPaddle = new Paddle(500, 100, 25, 100);
   
   var ballSideCldr = new BallSideCollider(ball, playingField);
   
-  var ballHumanPaddleCldr =
-    new BallPaddleCollider(ball, humanPaddle);
+  //* waiting on BallPaddleCollider
+  //* var ballHumanPaddleCldr =
+  //* new BallPaddleCollider(ball, humanPaddle);
   var humanPaddleSideCldr =
     new PaddleSideCollider(humanPaddle, playingField);
   var humanPaddleCtrl = new HumanPaddleController(humanPaddle);
   var humanPaddleView = new PaddleView(humanPaddle, "#FF0000");
   
-  var ballAIPaddleCldr =
-    new BallPaddleCollider(ball, aiPaddle);
+  //* waiting on BallPaddleCollider
+  //* var ballAIPaddleCldr =
+  //* new BallPaddleCollider(ball, aiPaddle);
   var aiPaddleSideCldr =
     new PaddleSideCollider(aiPaddle, playingField);
   var aiPaddleCtrl = new AIPaddleController(aiPaddle);
@@ -32,11 +34,11 @@ function GameMaster(state) {
   state.addEntity(humanPaddle);
   state.addEntity(aiPaddle);
   state.addEntity(ballSideCldr);
-  state.addEntity(ballHumanPaddleCldr);
+  //* state.addEntity(ballHumanPaddleCldr);
   state.addEntity(humanPaddleSideCldr);
   state.addEntity(humanPaddleCtrl);
   state.addEntity(humanPaddleView);
-  state.addEntity(ballAIPaddleCldr);
+  //* state.addEntity(ballAIPaddleCldr);
   state.addEntity(aiPaddleSideCldr);
   state.addEntity(aiPaddleCtrl);
   state.addEntity(aiPaddleView);
@@ -106,7 +108,7 @@ GameMaster.prototype = {
     aiPaddle.setY(100);
   },
   
-  getDependencies: function (outList) {
+  getDependencies: function (state, outList) {
     outList.push(this.get__Ball());
     outList.push(this.get__HumanPaddle());
     outList.push(this.get__AIPaddle());
