@@ -9,7 +9,7 @@ HumanPaddleController.prototype = {
     var goUp = keyboard.isDown(GFW_Key.w) || keyboard.isDown(GFW_Key.upArrow);
     var goDown = keyboard.isDown(GFW_Key.s) || keyboard.isDown(GFW_Key.downArrow);
     
-    if ((!goUp && goDown) || (goUp && !goDown))
+    if ((!goUp && goDown) || (goUp && !goDown)) {
       if (goUp) {
         this.get__paddle().setVelocY(-1);
       }
