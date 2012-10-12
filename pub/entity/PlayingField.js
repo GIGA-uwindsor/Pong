@@ -1,5 +1,5 @@
 function PlayingField(x, y, width, height) {
-  this.setRect(new GFW_Rect(x, y, width height));
+  this.setRect(new GFW_Rect(x, y, width, height));
 }
 
 PlayingField.prototype = {
