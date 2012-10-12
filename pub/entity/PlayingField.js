@@ -4,7 +4,29 @@ function PlayingField(x, y, width, height) {
 
 PlayingField.prototype = {
 
+  getX: function () {
+    return this.getRect().getX();
+  },
   
+  getY: function () {
+    return this.getRect().getY();
+  },
+  
+  getWidth: function () {
+    return this.getRect().getWidth();
+  },
+  
+  getHeight: function () {
+    return this.getRect().getHeight();
+  },
+  
+  getRight: function () {
+    return this.getRect().getRight();
+  },
+  
+  getBottom: function () {
+    return this.getRect().getBottom();
+  }
 
 }
 
