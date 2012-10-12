@@ -80,7 +80,9 @@ Ball.prototype = {
     // Get the delta time since last update
     var delta = updateParams.getTime().getDelta();
     if ( Math.abs(delta) > 10000 ) // Return if delta is bugged
+    {
       return;
+    }
     
     // Update the ball's position
     this.setPosition( this.getX() + this.getVX()*delta/10, this.getY() + this.getVY()*delta/10 );
