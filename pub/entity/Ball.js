@@ -1,72 +1,127 @@
+/*  
+  Ball Design:
+    + position (X/Y property, setPosition)
+    + bounding circle (Radius property can be used by colliders)
+    + velocity (VX/VY property, setVelocity, mulVelocityX/Y, implemented in update)
+    + graphic (currently using a circle with Radius property)
+    - if veloc.x is zero, correct to non-zero (done, also checks if veloc.x is too slow, since 0.001 is still non-zero)
+*/
 function Ball(x,y) {
   this._GFW_Entity_Initialize();
   this.setPosition(x,y);
-  this.setVelocity(3,3);
-  this.setBounds(640,480);
+  this.setVelocity( (Math.random() < 0.5 ? 1 : -1), (Math.random() < 0.5 ? 1 : -1));
   this.setRadius(10);
 }
 
 Ball.prototype = {
-  // Sets the position of the Ball
+/* FUNCTIONALITY */  
+  /**
+    * Tells the ball to move either left or right at the given multiple of its current X velocity.
+    *
+    * @param multiplier
+    *   The multiplier to apply to the ball's current X velocity.
+    *
+    * @param isAbsolute
+    *   Boolean value specifying the behaviour of this function. If ommitted, the
+    *   default value is true.
+    *     true  = Multiplier is absolute. A negative multiplier moves the ball left,
+    *             and a positive multiplier moves it right.
+    *     false = Multiplier is relative. A negative multiplier moves the ball in the
+    *             opposite direction it is currently moving.
+    */
+  mulVelocityX: function(multiplier, isAbsolute) {
+    if ( isAbsolute == undefined ) isAbsolute = true; // default parameter
+    var vx = isAbsolute ? Math.abs(this.getVX()) : this.getVX();
+    this.setVX(vx * multiplier);    
+  },
+
+  /**
+    * Tells the ball to move either up or down at the given multiple of its current Y velocity.
+    *
+    * @param multiplier
+    *   The multiplier to apply to the ball's current Y velocity.
+    *
+    * @param isAbsolute
+    *   Boolean value specifying the behaviour of this function. If ommitted, the
+    *   default value is true.
+    *     true  = Multiplier is absolute. A negative multiplier moves the ball up,
+    *             and a positive multiplier moves it down.
+    *     false = Multiplier is relative. A negative multiplier moves the ball in the
+    *             opposite direction it is currently moving.
+    */
+  mulVelocityY: function(multiplier, isAbsolute) {
+    if ( isAbsolute == undefined ) isAbsolute = true; // default parameter
+    var vy = isAbsolute ? Math.abs(this.getVY()) : this.getVY();
+    this.setVY(vy * multiplier);    
+  },
+
+/* CONVENIENCE */
+  /**
+    * Sets the position of the ball.
+    */
   setPosition: function (x,y) {
     this.setX(x);
     this.setY(y);
   },
-  // Sets the velocity of the Ball, negative value goes left/up
+  
+  /**
+    * Sets the velocity of the ball. Positive values indicate the ball is moving
+    * (right,down) and negative values indicate the ball is moving (left,up).
+    */
   setVelocity: function (x,y) {
     this.setVX(x);
     this.setVY(y);
   },
-  // Sets the bounds of the ball, this is stretched over the canvas
-  setBounds: function (x,y) {
-    this.setBoundX(x);
-    this.setBoundY(y);
+  
+/* CALLBACKS */  
+  /** UPDATE */
+  update: function (updateParams) {
+    
+    // Get the delta time since last update
+    var delta = updateParams.getTime().getDelta();
+    if ( Math.abs(delta) > 10000 ) // Return if delta is bugged
+    {
+      return;
+    }
+    
+    // Update the ball's position
+    this.setPosition( this.getX() + this.getVX()*delta/10, this.getY() + this.getVY()*delta/10 );
+    
+    // Randomize the ball's X velocity if it's either not moving, or too slow
+    if ( Math.abs(this.getVX()) < 0.5 )
+    {
+      var direction;
+      if ( this.getVX() < 0 )
+        direction = -1;
+      else if ( this.getVX() > 0 )
+        direction = 1;
+      else // VX is 0
+        direction = (Math.random() < 0.5 ? 1 : -1);
+      
+      this.setVX( direction * // either -1 or 1, multiplied by...
+                  Math.random()+1 );  // a random number from 1 to 2
+    }
   },
 
-  update: function (updateParams) {
-    // Localize variables
+  /** DRAW */
+  draw: function (ctx, assets)
+  {
+    // Localize some variables
     var x = this.getX();
     var y = this.getY();
-    
-    var boundX = this.getBoundX();
-    var boundY = this.getBoundY();
-    
     var r = this.getRadius();
     
-    // Localize the ball's bounds
-    var left    = x - r;
-    var top     = y - r;
-    var right   = x + r;
-    var bottom  = y + r;
-
-    // Bounce off of the walls
-    if ( left <= 0 || right >= boundX ) // left/right
-      this.setVX( (left <= 0 ? 1 : -1) * Math.abs(this.getVX()) );
-
-    if ( top <= 0 || bottom >= boundY ) // top/bottom
-      this.setVY( (top <= 0 ? 1 : -1) * Math.abs(this.getVY()) );
-
-    // Update the ball's position
-    this.setPosition( x + this.getVX(), y + this.getVY() );
-    
-    // Randomize the ball's X velocity if there is none
-    if ( this.getVX() == 0 )
-      this.setVX( (Math.random() < 0.5 ? 1 : -1) * // either -1 or 1, multiplied by...
-                    Math.floor(Math.random()*3 + 1) );  // a number from 1 to 3?
-  },
-
-  draw: function (ctx, assets) {
-    // Project the ball onto the drawing canvas
-    var x = (this.getX() / this.getBoundX()) * ctx.canvas.width;
-    var y = (this.getY() / this.getBoundY()) * ctx.canvas.height;
-    
     // Code copied/modified from AwesomeCircle
-    var startAngle = 0;
-    var endAngle = Math.PI * 2;
     ctx.beginPath();
-    ctx.arc(x, y, this.getRadius(), startAngle, endAngle, true);
+    ctx.arc(x, y, r, 0, 2*Math.PI);
+    
+    var grd = ctx.createRadialGradient(x,y,0, x,y,r);
+    grd.addColorStop(0,"blue");
+    grd.addColorStop(1,"black");
+    
+    ctx.fillStyle=grd;
     ctx.fill();
-  }
+  },
 
 }
 
@@ -77,10 +132,6 @@ GFW_Property(Ball, "Y");
 // Velocity
 GFW_Property(Ball, "VX");
 GFW_Property(Ball, "VY");
-
-// Scale
-GFW_Property(Ball, "BoundX");
-GFW_Property(Ball, "BoundY");
 
 // Radius
 GFW_Property(Ball, "Radius");
