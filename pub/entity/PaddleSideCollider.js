@@ -1,6 +1,6 @@
 /*  
   PaddleSideCollider Design:
-    - Hit tests paddle and sides
+    - Hit tests paddle and sides (paddle Y/Bottom with PlayingField Y/Bottom
     - Paddle-side collision resolution
     
     Refs: Paddle, PlayingField
@@ -13,7 +13,7 @@ function BallSideCollider(paddleRef,playingFieldRef) {
 
 BallSideCollider.prototype = {
   __paddleRef: undefined,
-  __fieldRef: undefined,
+  __fieldRef:  undefined,
   
 /* CALLBACKS */
   /** UPDATE */
@@ -26,13 +26,12 @@ BallSideCollider.prototype = {
     var field   = this.__fieldRef;
     
     // Limit the top
-    if ( paddle.getY() < 0 )
-      paddle.setY(0);
+    if ( paddle.getY() < field.getY() )
+      paddle.setY( field.getY() );
     
     // Limit the bottom
-    /*if ( paddle.getBottom() > field.getBottom() )
+    if ( paddle.getBottom() > field.getBottom() )
       paddle.setY( field.getBottom() - paddle.getHeight() );
-    */
   },
   
 }
