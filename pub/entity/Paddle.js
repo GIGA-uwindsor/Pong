@@ -44,8 +44,8 @@ Paddle.prototype = {
   },
   
   /* left */
-  getLeft: function () {
-    return this.getRect().getLeft();
+  getBottom: function () {
+    return this.getRect().getBottom();
   }
 }
 
