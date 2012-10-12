@@ -5,39 +5,45 @@
     
     Refs: Ball, PaddleA, PaddleB
 */
-function BallPaddleCollider(ballRef, paddleARef, paddleBRef) {
+function BallPaddleCollider(ballRef, paddleRef) {
   this._GFW_Entity_Initialize();
 
   this.__ballRef = ballRef;
-  this.__paddleARef = paddleARef;
-  this.__paddleBRef = paddleBRef;
+  this.__paddleRef = paddleRef;
 }
 
 BallPaddleCollider.prototype = {
   __ballRef: undefined,
-  __paddleARef: undefined,
-  __paddleBRef: undefined,
+  __paddleRef: undefined,
   
 /* CALLBACKS */
   /** UPDATE */
   update: function (updateParams) {
 
  	// Ignore if there is no ball
-    if ( this.__ballRef == undefined || 
-		 this.__paddleARef == undefined ||
-		 this.__paddleBRef == undefined )
+    if ( this.__ballRef == undefined || this.__paddleRef == undefined )
       return;
     
     // Localize variables
     var ball = this.__ballRef;
-	var paddleA = this.__paddleARef;
-	var paddleB = this.__paddleBRef;
+	var paddle = this.__paddleRef;
     
-	if ( Geometry.isCircleIntersectingRect() ) {
-		// Figure out which side of the paddle it hit
+	var intersecting = Geometry.isCircleIntersectingRect(
+		ball.getX(), ball.getY(), ball.getRadius(),
+		paddle.getRect()
+	);
 
-		// Then
-      	//ball.mulVelocityX( (left <= 0 ? 1 : -1) );
+	if (intersecting) {
+		// If the ball hits the paddle from the left or right
+		if (ball.getY() >= paddle.getY() && ball.getY() <= paddle.getBottom())
+      		ball.mulVelocityX(-1, false);
+
+		// If the ball hits the paddle from the top or bottom
+		else (ball.getX() >= paddle.getX() && ball.getX() <= paddle.getRight())
+      		ball.mulVelocityY(-1, false);
+
+		// Add half of the paddles velocity to the ball
+		ball.setVY( ball.getVY() + paddle.getVelocY() * 0.5);
 	}
   },
   
