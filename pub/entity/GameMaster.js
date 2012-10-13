@@ -70,7 +70,7 @@ GameMaster.prototype = {
     
     var pointScored = false;
     
-    if (ballLeft <= field.getLeft()) {
+    if (ballLeft <= field.getX()) {
       this.__pointToHuman();
       pointScored = true;
     }
