@@ -4,7 +4,11 @@ function GameScene(state, assets) {
 
 GameScene.prototype = {
   _onBegin: function (director) {
-    this.getState().addEntity(new Ball(100,100));
+    var ball = new Ball(300,200);
+    var field = new PlayingField(0,0,600,400);
+    this.getState().addEntity(field);
+    this.getState().addEntity( new BallSideCollider(ball, field) );
+    this.getState().addEntity(ball);
   },
 }
 
