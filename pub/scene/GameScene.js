@@ -4,12 +4,10 @@ function GameScene(state, assets) {
 
 GameScene.prototype = {
   _onBegin: function (director) {
-    var ball = new Ball(300,200);
-    var field = new PlayingField(0,0,600,400);
-    this.getState().addEntity(field);
-    this.getState().addEntity( new BallSideCollider(ball, field) );
-    this.getState().addEntity(ball);
+    this.set__GameMaster(new GameMaster(this.getState()));
+    this.getState().addEntity(this.get__GameMaster());
   },
 }
 
+GFW_Property(GameScene, "__GameMaster");
 GFW_mixin(GameScene, GFW_Scene, ["_onBegin"]);

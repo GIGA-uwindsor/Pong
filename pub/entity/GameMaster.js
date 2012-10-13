@@ -8,8 +8,8 @@ function GameMaster(state) {
   // TODO: extract numbers into some JSON config
   var playingField = new PlayingField(0, 0, 600, 300);
   var ball = new Ball(300, 200);
-  var humanPaddle = new Paddle(25, 100);
-  var aiPaddle = new Paddle(500, 100);
+  var humanPaddle = new Paddle(25, 100, 25, 100);
+  var aiPaddle = new Paddle(500, 100, 25, 100);
   
   var ballSideCldr = new BallSideCollider(ball, playingField);
   
@@ -24,7 +24,7 @@ function GameMaster(state) {
     new BallPaddleCollider(ball, aiPaddle);
   var aiPaddleSideCldr =
     new PaddleSideCollider(aiPaddle, playingField);
-  var aiPaddleCtrl = new AIPaddleController(aiPaddle);
+  var aiPaddleCtrl = new AIPaddleController(ball, aiPaddle);
   var aiPaddleView = new PaddleView(aiPaddle, "#00FF00");
   
   state.addEntity(playingField);
@@ -44,7 +44,8 @@ function GameMaster(state) {
   /*
    * 
    */
-   
+  
+  this.set__PlayingField(playingField);
   this.set__Ball(ball);
   this.set__HumanPaddle(humanPaddle);
   this.set__AIPaddle(aiPaddle);
@@ -67,7 +68,7 @@ GameMaster.prototype = {
     
     var pointScored = false;
     
-    if (ballLeft <= field.getLeft()) {
+    if (ballLeft <= field.getX()) {
       this.__pointToHuman();
       pointScored = true;
     }
@@ -106,7 +107,7 @@ GameMaster.prototype = {
     aiPaddle.setY(100);
   },
   
-  getDependencies: function (outList) {
+  getDependencies: function (state, outList) {
     outList.push(this.get__Ball());
     outList.push(this.get__HumanPaddle());
     outList.push(this.get__AIPaddle());
