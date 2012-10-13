@@ -29,5 +29,6 @@ var Geometry = (function(module) {
 							 (circleDistY-rHeightHalf)*(circleDistY-rHeightHalf);
 		return cornerDistance <= (cRad*cRad);
 	}
-
+  
+  return module;
 })({});
