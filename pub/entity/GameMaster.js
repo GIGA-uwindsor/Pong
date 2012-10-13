@@ -13,17 +13,15 @@ function GameMaster(state) {
   
   var ballSideCldr = new BallSideCollider(ball, playingField);
   
-  //* waiting on BallPaddleCollider
-  //* var ballHumanPaddleCldr =
-  //* new BallPaddleCollider(ball, humanPaddle);
+  var ballHumanPaddleCldr =
+    new BallPaddleCollider(ball, humanPaddle);
   var humanPaddleSideCldr =
     new PaddleSideCollider(humanPaddle, playingField);
   var humanPaddleCtrl = new HumanPaddleController(humanPaddle);
   var humanPaddleView = new PaddleView(humanPaddle, "#FF0000");
   
-  //* waiting on BallPaddleCollider
-  //* var ballAIPaddleCldr =
-  //* new BallPaddleCollider(ball, aiPaddle);
+  var ballAIPaddleCldr =
+    new BallPaddleCollider(ball, aiPaddle);
   var aiPaddleSideCldr =
     new PaddleSideCollider(aiPaddle, playingField);
   var aiPaddleCtrl = new AIPaddleController(ball, aiPaddle);
@@ -34,11 +32,11 @@ function GameMaster(state) {
   state.addEntity(humanPaddle);
   state.addEntity(aiPaddle);
   state.addEntity(ballSideCldr);
-  //* state.addEntity(ballHumanPaddleCldr);
+  state.addEntity(ballHumanPaddleCldr);
   state.addEntity(humanPaddleSideCldr);
   state.addEntity(humanPaddleCtrl);
   state.addEntity(humanPaddleView);
-  //* state.addEntity(ballAIPaddleCldr);
+  state.addEntity(ballAIPaddleCldr);
   state.addEntity(aiPaddleSideCldr);
   state.addEntity(aiPaddleCtrl);
   state.addEntity(aiPaddleView);
