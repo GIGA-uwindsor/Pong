@@ -2,17 +2,14 @@
   AIPaddleController design
     - Matches Paddle y position with ball y position.
 */
-function AIPaddleController(ballRef, paddleRef) {
+function AIPaddleController(ball, paddle) {
   this._GFW_Entity_Initialize();
-  this.__ballRef    = ballRef;
-  this.__paddleRef  = paddleRef;
+  this.set__Ball(ball);
+  this.set__Paddle(paddle);
   this.setThreshold(10);
 }
 
 AIPaddleController.prototype = {
-  __ballRef:    undefined,
-  __paddleRef:  undefined,
-  
 /* CALLBACKS */  
   /** UPDATE */
   update: function (updateParams) {
@@ -20,17 +17,19 @@ AIPaddleController.prototype = {
     if ( t < 1 ) // correction
       t = 1;
     
-    var currentY = __paddleRef.getY();
-    var ballY = __ballRef.getY();
+    var currentY = this.get__Paddle().getY();
+    var ballY = this.get__Ball().getY();
     
     var diff = ballY/t - currentY/t;
     
     if ( diff != 0 )
-      __paddleRef.setY(ballY); //__paddleRef.move(diff);
+      this.get__Paddle().setY(ballY); //__paddleRef.move(diff);
   },
 
 }
 
+GFW_Property(AIPaddleController, "__Ball");
+GFW_Property(AIPaddleController, "__Paddle");
 GFW_Property(AIPaddleController, "Threshold");
 
 GFW_mixin(AIPaddleController, GFW_Entity, ["update"]);
