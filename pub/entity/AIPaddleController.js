@@ -33,7 +33,7 @@ AIPaddleController.prototype = {
     var ball    = this.__ballRef;
     
     var ballDist = paddle.getX() - ball.getX();
-    if ( ballDist < 50 || ballDist > 450 )
+    if ( ballDist < 20 || ballDist > 450 )
       return;
     
     var currentY  = paddle.getY() + paddle.getHeight()/2;

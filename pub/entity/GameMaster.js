@@ -106,8 +106,7 @@ GameMaster.prototype = {
     var humanPaddle = this.get__HumanPaddle();
     var aiPaddle = this.get__AIPaddle();
     
-    ball.setX(300);
-    ball.setY(200);
+    ball.reset();
     
     humanPaddle.setX(25);
     humanPaddle.setY(100);
