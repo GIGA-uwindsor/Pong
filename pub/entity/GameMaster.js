@@ -5,11 +5,20 @@ function GameMaster(state) {
    * Initialize game entities
    */
 
-  // TODO: extract numbers into some JSON config
-  var playingField = new PlayingField(0, 0, 600, 300);
-  var ball = new Ball(300, 200);
-  var humanPaddle = new Paddle(25, 100, 25, 100);
-  var aiPaddle = new Paddle(500, 100, 25, 100);
+  // @TODO: extract numbers into some JSON config
+  // Use local rect for now
+  var fieldRct = new GFW_Rect(0, 0, 600, 300);
+  
+  var playingField = new PlayingField(fieldRct.getX(), fieldRct.getY(), fieldRct.getWidth(), fieldRct.getHeight());
+  var ball = new Ball(fieldRct.getWidth()/2 + fieldRct.getX(), fieldRct.getHeight()/2 + fieldRct.getY());
+  
+  // Intermediate paddle dimensions
+  var padWid = 25;
+  var padHgt = 100;
+  var padY = fieldRct.getY() + (fieldRct.getHeight() - padHgt)/2;
+  
+  var humanPaddle = new Paddle( fieldRct.getX()     + padWid,     padY, padWid, padHgt);
+  var aiPaddle = new Paddle(    fieldRct.getRight() - (padWid*2), padY, padWid, padHgt);
   
   var ballSideCldr = new BallSideCollider(ball, playingField);
   
@@ -97,14 +106,9 @@ GameMaster.prototype = {
     var humanPaddle = this.get__HumanPaddle();
     var aiPaddle = this.get__AIPaddle();
     
-    ball.setX(300);
-    ball.setY(200);
-    
-    humanPaddle.setX(25);
-    humanPaddle.setY(100);
-    
-    aiPaddle.setX(550);
-    aiPaddle.setY(100);
+    ball.reset();
+    humanPaddle.reset();
+    aiPaddle.reset();
   },
   
   getDependencies: function (state, outList) {

@@ -21,8 +21,8 @@ PaddleView.prototype = {
     ctx.fillStyle = this.getColor();
     ctx.fillRect( paddle.getX(),
                   paddle.getY(),
-                  paddle.getRight(),
-                  paddle.getBottom() );
+                  paddle.getWidth(),
+                  paddle.getHeight() );
   }
 
 }
