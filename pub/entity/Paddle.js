@@ -1,11 +1,18 @@
 function Paddle(x, y, width, height) {
   this._GFW_Entity_Initialize();
   this.setRect(new GFW_Rect(x, y, width, height));
+  this.setStartX(x);
+  this.setStartY(y);
   this.setVelocX(0);
   this.setVelocY(0);
 }
 
 Paddle.prototype = {
+
+  reset: function() {
+    this.setX( this.getStartX() );
+    this.setY( this.getStartY() );
+  },
 
   /* x position */
   getX: function () {
@@ -53,4 +60,6 @@ Paddle.prototype = {
 GFW_Property(Paddle, "VelocX");
 GFW_Property(Paddle, "VelocY");
 GFW_Property(Paddle, "Rect");
+GFW_Property(Paddle, "StartX");
+GFW_Property(Paddle, "StartY");
 GFW_mixin(Paddle, GFW_Entity);

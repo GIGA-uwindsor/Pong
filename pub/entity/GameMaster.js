@@ -107,12 +107,8 @@ GameMaster.prototype = {
     var aiPaddle = this.get__AIPaddle();
     
     ball.reset();
-    
-    humanPaddle.setX(25);
-    humanPaddle.setY(100);
-    
-    aiPaddle.setX(550);
-    aiPaddle.setY(100);
+    humanPaddle.reset();
+    aiPaddle.reset();
   },
   
   getDependencies: function (state, outList) {
