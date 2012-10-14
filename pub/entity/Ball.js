@@ -8,9 +8,10 @@
 */
 function Ball(x,y) {
   this._GFW_Entity_Initialize();
-  this.setPosition(x,y);
-  this.setVelocity( (Math.random() < 0.5 ? 1 : -1), (Math.random() < 0.5 ? 1 : -1));
+  this.setStartPosition(x,y);
   this.setRadius(10);
+  
+  this.reset();
 }
 
 Ball.prototype = {
@@ -54,6 +55,14 @@ Ball.prototype = {
     var vy = isAbsolute ? Math.abs(this.getVY()) : this.getVY();
     this.setVY(vy * multiplier);    
   },
+  
+  /**
+    * Resets the position of the ball and calculates a new trajectory.
+    */
+  reset: function() {
+    this.setPosition( this.getStartX(), this.getStartY() );
+    this.setVelocity( (Math.random() < 0.5 ? 1 : -1), (Math.random()*4)-2);
+  },
 
 /* CONVENIENCE */
   /**
@@ -62,6 +71,15 @@ Ball.prototype = {
   setPosition: function (x,y) {
     this.setX(x);
     this.setY(y);
+  },
+  
+  /**
+    * Sets the starting position of the ball. This is the position that the
+    * ball is moved to when reset() is called.
+    */
+  setStartPosition: function (x,y) {
+    this.setStartX(x);
+    this.setStartY(y);
   },
   
   /**
@@ -128,6 +146,10 @@ Ball.prototype = {
 // Position
 GFW_Property(Ball, "X");
 GFW_Property(Ball, "Y");
+
+// Reset Position
+GFW_Property(Ball, "StartX");
+GFW_Property(Ball, "StartY");
 
 // Velocity
 GFW_Property(Ball, "VX");
