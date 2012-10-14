@@ -1,4 +1,5 @@
 function Paddle(x, y, width, height) {
+  this._GFW_Entity_Initialize();
   this.setRect(new GFW_Rect(x, y, width, height));
   this.setVelocX(0);
   this.setVelocY(0);
