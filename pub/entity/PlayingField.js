@@ -27,9 +27,12 @@ PlayingField.prototype = {
   
   getBottom: function () {
     return this.getRect().getBottom();
-  }
+  },
 
+  draw: function (ctx, assets) {
+    ctx.strokeRect( this.getX(), this.getY(), this.getWidth(), this.getHeight() );
+  },
 }
 
 GFW_Property(PlayingField, "Rect");
-GFW_mixin(PlayingField, GFW_Entity);
+GFW_mixin(PlayingField, GFW_Entity, ["draw"]);

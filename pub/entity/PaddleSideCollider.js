@@ -34,6 +34,10 @@ PaddleSideCollider.prototype = {
       paddle.setY( field.getBottom() - paddle.getHeight() );
   },
   
+  /** DEPENDENCIES */
+  getDependencies: function(state, outList) {
+    outList.push(this.__paddleRef);
+  }
 }
 
-GFW_mixin(PaddleSideCollider, GFW_Entity, ["update"]);
+GFW_mixin(PaddleSideCollider, GFW_Entity, ["update", "getDependencies"]);
