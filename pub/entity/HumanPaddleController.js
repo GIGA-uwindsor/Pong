@@ -12,16 +12,14 @@ HumanPaddleController.prototype = {
 		
     if ((!goUp && goDown) || (goUp && !goDown)) {
       if (goUp) {
-        //this.get__paddle().setVelocY(-1);
 				this.get__paddle().setY(this.get__paddle().getY()-2);
       }
       else {
-        //this.get__paddle().setVelocY(100);
 				this.get__paddle().setY(this.get__paddle().getY()+2);
       }
     }
     else {
-      this.get__paddle().setVelocY(1000);
+		
     }
   }
   
