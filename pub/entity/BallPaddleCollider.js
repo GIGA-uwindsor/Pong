@@ -39,7 +39,7 @@ BallPaddleCollider.prototype = {
       		ball.mulVelocityX(-1, false);
 
 		// If the ball hits the paddle from the top or bottom
-		else (ball.getX() >= paddle.getX() && ball.getX() <= paddle.getRight())
+		else if (ball.getX() >= paddle.getX() && ball.getX() <= paddle.getRight())
       		ball.mulVelocityY(-1, false);
 
 		// Add half of the paddles velocity to the ball
