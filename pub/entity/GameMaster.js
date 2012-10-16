@@ -36,6 +36,11 @@ function GameMaster(state) {
   var aiPaddleCtrl = new AIPaddleController(ball, aiPaddle);
   var aiPaddleView = new PaddleView(aiPaddle, "#00FF00");
   
+  var humanPenetrationSolver
+    = new PenetrationSolver(playingField, ball, humanPaddle);
+  var aiPenetrationSolver
+    = new PenetrationSolver(playingField, ball, aiPaddle);
+  
   state.addEntity(playingField);
   state.addEntity(ball);
   state.addEntity(humanPaddle);
@@ -49,6 +54,8 @@ function GameMaster(state) {
   state.addEntity(aiPaddleSideCldr);
   state.addEntity(aiPaddleCtrl);
   state.addEntity(aiPaddleView);
+  state.addEntity(humanPenetrationSolver);
+  state.addEntity(aiPenetrationSolver);
   
   /*
    * 
