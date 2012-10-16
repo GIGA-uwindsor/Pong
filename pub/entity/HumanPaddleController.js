@@ -10,17 +10,8 @@ HumanPaddleController.prototype = {
     var goUp = keyboard.isKeyDown(GFW_Key.w) || keyboard.isKeyDown(GFW_Key.upArrow);
     var goDown = keyboard.isKeyDown(GFW_Key.s) || keyboard.isKeyDown(GFW_Key.downArrow);
 		
-    if ((!goUp && goDown) || (goUp && !goDown)) {
-      if (goUp) {
-				this.get__paddle().setY(this.get__paddle().getY()-2);
-      }
-      else {
-				this.get__paddle().setY(this.get__paddle().getY()+2);
-      }
-    }
-    else {
-		
-    }
+    if ( goUp || goDown )
+      this.get__paddle().move( goUp ? -1 : 1 );
   }
   
 }

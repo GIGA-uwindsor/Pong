@@ -12,7 +12,7 @@ function AIPaddleController(ball, paddle) {
   //this.set__Paddle(paddle);
   this.__ballRef = ball;
   this.__paddleRef = paddle;
-  this.setThreshold(10);
+  this.setThreshold(25);
 }
 
 AIPaddleController.prototype = {
@@ -32,16 +32,12 @@ AIPaddleController.prototype = {
     var paddle  = this.__paddleRef;
     var ball    = this.__ballRef;
     
-    var ballDist = paddle.getX() - ball.getX();
-    if ( ballDist < 20 || ballDist > 450 )
-      return;
-    
     var currentY  = paddle.getY() + paddle.getHeight()/2;
     var ballY     = ball.getY();
     
     var diff = ballY - currentY;
     if ( Math.round(diff/t) != 0 )
-      paddle.setY(ballY - paddle.getHeight()/2 ); //__paddleRef.move(diff);
+      paddle.move( diff < 0 ? -1 : 1 ); //__paddleRef.move(diff);
   },
 
 }
