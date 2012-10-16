@@ -34,8 +34,19 @@ BallPaddleCollider.prototype = {
 	);
 
 	if (intersecting) {
+  
+    // If the ball hits a corner
+    if (
+      (ball.getY() <= paddle.getY() || ball.getY() >= paddle.getBottom())
+      &&
+      (ball.getX() <= paddle.getX() || ball.getX() >= paddle.getRight())
+      ) {
+        ball.mulVelocityX(-1, false);
+        ball.mulVelocityY(-1, false);
+      }
+  
 		// If the ball hits the paddle from the left or right
-		if (ball.getY() >= paddle.getY() && ball.getY() <= paddle.getBottom())
+		else if (ball.getY() >= paddle.getY() && ball.getY() <= paddle.getBottom())
       		ball.mulVelocityX(-1, false);
 
 		// If the ball hits the paddle from the top or bottom
