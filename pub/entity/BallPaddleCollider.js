@@ -19,44 +19,48 @@ BallPaddleCollider.prototype = {
 /* CALLBACKS */
   /** UPDATE */
   update: function (updateParams) {
-
- 	// Ignore if there is no ball
+    // Ignore if there is no ball
     if ( this.__ballRef == undefined || this.__paddleRef == undefined )
       return;
     
     // Localize variables
     var ball = this.__ballRef;
-	var paddle = this.__paddleRef;
+    var paddle = this.__paddleRef;
+      
+    var dTop = paddle.getY() - ball.getY();
+    var dLeft = paddle.getX() - ball.getX();
+    var dRight = ball.getX() - paddle.getRight();
+    var dBot = ball.getY() - paddle.getBottom();
     
-	var intersecting = Geometry.isCircleIntersectingRect(
-		ball.getX(), ball.getY(), ball.getRadius(),
-		paddle.getRect()
-	);
-
-	if (intersecting) {
-  
-    // If the ball hits a corner
-    if (
-      (ball.getY() <= paddle.getY() || ball.getY() >= paddle.getBottom())
-      &&
-      (ball.getX() <= paddle.getX() || ball.getX() >= paddle.getRight())
-      ) {
-        ball.mulVelocityX(-1, false);
-        ball.mulVelocityY(-1, false);
+    var d = 0;
+    if (dTop > 0) d += dTop;
+    if (dLeft > 0) d += dLeft;
+    if (dRight > 0) d += dRight;
+    if (dBot > 0) d += dBot;
+      
+    var intersecting = d <= ball.getRadius();
+    if (intersecting) {
+      // portion of the paddle's y-veloc increases ball speed
+      var speedUp = Math.abs((paddle.getVelocY() - ball.getVY())*0.1);
+    
+      // if hit top & ball is moving down, deflect up
+      if (dTop > 0 && ball.getVY() > 0) {
+        ball.mulVelocityY(-speedUp - 1, false);
       }
-  
-		// If the ball hits the paddle from the left or right
-		else if (ball.getY() >= paddle.getY() && ball.getY() <= paddle.getBottom())
-      		ball.mulVelocityX(-1, false);
-
-		// If the ball hits the paddle from the top or bottom
-		else if (ball.getX() >= paddle.getX() && ball.getX() <= paddle.getRight())
-      		ball.mulVelocityY(-1, false);
-
-		// Add half of the paddles velocity to the ball
-		ball.setVY( ball.getVY() + paddle.getVelocY() * 0.5);
-	}
-  },
+      // if hit bot & ball is moving up, deflect down
+      if (dBot > 0 && ball.getVY() < 0) {
+        ball.mulVelocityY(-speedUp - 1, false);
+      }
+      // if hit left & ball is moving right, deflect left
+      if (dLeft > 0 && ball.getVX() > 0) {
+        ball.mulVelocityX(-speedUp - 1, false);
+      }
+      // if hit right & ball is moving left, deflect right
+      if (dRight > 0 && ball.getVX() < 0) {
+        ball.mulVelocityX(-speedUp - 1, false);
+      }
+    }
+  }
   
 }
 

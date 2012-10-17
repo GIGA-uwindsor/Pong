@@ -20,8 +20,8 @@ PenetrationSolver.prototype = {
     var ball = this.get__Ball();
     
     // paddle centre to ball centre unit vector
-    var bpx = ball.getX() - paddle.getX() - paddle.getWidth();
-    var bpy = ball.getY() - paddle.getY() - paddle.getHeight();
+    var bpx = ball.getX() - paddle.getX() - paddle.getWidth() / 2.0;
+    var bpy = ball.getY() - paddle.getY() - paddle.getHeight() / 2.0;
     var n = Math.sqrt(bpx*bpx + bpy*bpy);
     bpx = bpx / n;
     bpy = bpy / n;
@@ -29,7 +29,7 @@ PenetrationSolver.prototype = {
     var min_x = ball.getX();
     var min_y = ball.getY();
     // initial guess
-    var m = ball.getRadius();
+    var m = ball.getRadius() * 2;
     var max_x = min_x + m * bpx;
     var max_y = min_y + m * bpy;
     
@@ -49,11 +49,6 @@ PenetrationSolver.prototype = {
         max_y = mid_y;
       }
     }
-    
-    // max is guaranteed to not be penetrating paddle
-    // (assuming good initial guess)
-    ball.setX(max_x);
-    ball.setY(max_y);
   },
   
   __ballIntersectsPaddle: function() {
