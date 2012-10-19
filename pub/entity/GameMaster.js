@@ -10,6 +10,7 @@ function GameMaster(state) {
   var fieldRct = new GFW_Rect(0, 0, 600, 300);
   
   var playingField = new PlayingField(fieldRct.getX(), fieldRct.getY(), fieldRct.getWidth(), fieldRct.getHeight());
+  var scoreView = new ScoreView(this, playingField);
   var ball = new Ball(fieldRct.getWidth()/2 + fieldRct.getX(), fieldRct.getHeight()/2 + fieldRct.getY());
   
   // Intermediate paddle dimensions
@@ -42,6 +43,7 @@ function GameMaster(state) {
     = new PenetrationSolver(playingField, ball, aiPaddle);
   
   state.addEntity(playingField);
+  state.addEntity(scoreView);
   state.addEntity(ball);
   state.addEntity(humanPaddle);
   state.addEntity(aiPaddle);
@@ -116,6 +118,14 @@ GameMaster.prototype = {
     ball.reset();
     humanPaddle.reset();
     aiPaddle.reset();
+  },
+
+  getHumanScore: function () {
+  	return this.get__humanScore();
+  },
+
+  getAiScore: function () {
+  	return this.get__aiScore();
   },
   
   getDependencies: function (state, outList) {
