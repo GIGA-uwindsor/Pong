@@ -8,9 +8,10 @@
 */
 function Ball(x,y) {
   this._GFW_Entity_Initialize();
-  this.setPosition(x,y);
-  this.setVelocity( (Math.random() < 0.5 ? 1 : -1), (Math.random() < 0.5 ? 1 : -1));
+  this.setStartPosition(x,y);
   this.setRadius(10);
+  
+  this.reset();
 }
 
 Ball.prototype = {
@@ -54,6 +55,14 @@ Ball.prototype = {
     var vy = isAbsolute ? Math.abs(this.getVY()) : this.getVY();
     this.setVY(vy * multiplier);    
   },
+  
+  /**
+    * Resets the position of the ball and calculates a new trajectory.
+    */
+  reset: function() {
+    this.setPosition( this.getStartX(), this.getStartY() );
+    this.setVelocity( (Math.random() < 0.5 ? 2 : -2), (Math.random()*4)-2);
+  },
 
 /* CONVENIENCE */
   /**
@@ -62,6 +71,15 @@ Ball.prototype = {
   setPosition: function (x,y) {
     this.setX(x);
     this.setY(y);
+  },
+  
+  /**
+    * Sets the starting position of the ball. This is the position that the
+    * ball is moved to when reset() is called.
+    */
+  setStartPosition: function (x,y) {
+    this.setStartX(x);
+    this.setStartY(y);
   },
   
   /**
@@ -84,13 +102,28 @@ Ball.prototype = {
       return;
     }
     
+    // cap the velocity
+    const max = 7;
+    this.setVX(this.getVX() > max ? max : this.getVX());
+    this.setVY(this.getVY() > max ? max : this.getVY());
+    
     // Update the ball's position
     this.setPosition( this.getX() + this.getVX()*delta/10, this.getY() + this.getVY()*delta/10 );
     
-    // Randomize the ball's X velocity if there is none
-    if ( this.getVX() == 0 )
-      this.setVX( (Math.random() < 0.5 ? 1 : -1) * // either -1 or 1, multiplied by...
-                    Math.floor(Math.random()*3 + 1) );  // a number from 1 to 3?
+    // Randomize the ball's X velocity if it's either not moving, or too slow
+    if ( Math.abs(this.getVX()) < 0.5 )
+    {
+      var direction;
+      if ( this.getVX() < 0 )
+        direction = -1;
+      else if ( this.getVX() > 0 )
+        direction = 1;
+      else // VX is 0
+        direction = (Math.random() < 0.5 ? 1 : -1);
+      
+      this.setVX( direction * // either -1 or 1, multiplied by...
+                  Math.random()+1 );  // a random number from 1 to 2
+    }
   },
 
   /** DRAW */
@@ -118,6 +151,10 @@ Ball.prototype = {
 // Position
 GFW_Property(Ball, "X");
 GFW_Property(Ball, "Y");
+
+// Reset Position
+GFW_Property(Ball, "StartX");
+GFW_Property(Ball, "StartY");
 
 // Velocity
 GFW_Property(Ball, "VX");

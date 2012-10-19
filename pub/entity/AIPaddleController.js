@@ -1,32 +1,43 @@
 /*
   AIPaddleController design
     - Matches Paddle y position with ball y position.
+    
+  NOTE: Purpose of threshold is to tell the AI when to move the paddle
+  instead of moving directly to ball's y position, to make it more realistic.
+  This is intended for when paddle movement is regulated.
 */
-function AIPaddleController(ballRef, paddleRef) {
+function AIPaddleController(ball, paddle) {
   this._GFW_Entity_Initialize();
-  this.__ballRef    = ballRef;
-  this.__paddleRef  = paddleRef;
-  this.setThreshold(10);
+  //this.set__Ball(ball);
+  //this.set__Paddle(paddle);
+  this.__ballRef = ball;
+  this.__paddleRef = paddle;
+  this.setThreshold(25);
 }
 
 AIPaddleController.prototype = {
-  __ballRef:    undefined,
-  __paddleRef:  undefined,
+  __ballRef : undefined,
+  __paddleRef : undefined,
   
 /* CALLBACKS */  
   /** UPDATE */
   update: function (updateParams) {
+    if ( this.__ballRef == undefined || this.__paddleRef == undefined )
+      return;
+  
     var t = this.getThreshold();
     if ( t < 1 ) // correction
       t = 1;
+      
+    var paddle  = this.__paddleRef;
+    var ball    = this.__ballRef;
     
-    var currentY = __paddleRef.getY();
-    var ballY = __ballRef.getY();
+    var currentY  = paddle.getY() + paddle.getHeight()/2;
+    var ballY     = ball.getY();
     
-    var diff = ballY/t - currentY/t;
-    
-    if ( diff != 0 )
-      __paddleRef.setY(ballY); //__paddleRef.move(diff);
+    var diff = ballY - currentY;
+    if ( Math.round(diff/t) != 0 )
+      paddle.move( diff < 0 ? -1 : 1 ); //__paddleRef.move(diff);
   },
 
 }

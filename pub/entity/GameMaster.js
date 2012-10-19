@@ -5,11 +5,21 @@ function GameMaster(state) {
    * Initialize game entities
    */
 
-  // TODO: extract numbers into some JSON config
-  var playingField = new PlayingField(0, 0, 600, 300);
-  var ball = new Ball(300, 200);
-  var humanPaddle = new Paddle(25, 100);
-  var aiPaddle = new Paddle(500, 100);
+  // @TODO: extract numbers into some JSON config
+  // Use local rect for now
+  var fieldRct = new GFW_Rect(0, 0, 600, 300);
+  
+  var playingField = new PlayingField(fieldRct.getX(), fieldRct.getY(), fieldRct.getWidth(), fieldRct.getHeight());
+  var scoreView = new ScoreView(this, playingField);
+  var ball = new Ball(fieldRct.getWidth()/2 + fieldRct.getX(), fieldRct.getHeight()/2 + fieldRct.getY());
+  
+  // Intermediate paddle dimensions
+  var padWid = 25;
+  var padHgt = 100;
+  var padY = fieldRct.getY() + (fieldRct.getHeight() - padHgt)/2;
+  
+  var humanPaddle = new Paddle( fieldRct.getX()     + padWid,     padY, padWid, padHgt);
+  var aiPaddle = new Paddle(    fieldRct.getRight() - (padWid*2), padY, padWid, padHgt);
   
   var ballSideCldr = new BallSideCollider(ball, playingField);
   
@@ -24,10 +34,16 @@ function GameMaster(state) {
     new BallPaddleCollider(ball, aiPaddle);
   var aiPaddleSideCldr =
     new PaddleSideCollider(aiPaddle, playingField);
-  var aiPaddleCtrl = new AIPaddleController(aiPaddle);
+  var aiPaddleCtrl = new AIPaddleController(ball, aiPaddle);
   var aiPaddleView = new PaddleView(aiPaddle, "#00FF00");
   
+  var humanPenetrationSolver
+    = new PenetrationSolver(playingField, ball, humanPaddle);
+  var aiPenetrationSolver
+    = new PenetrationSolver(playingField, ball, aiPaddle);
+  
   state.addEntity(playingField);
+  state.addEntity(scoreView);
   state.addEntity(ball);
   state.addEntity(humanPaddle);
   state.addEntity(aiPaddle);
@@ -40,11 +56,14 @@ function GameMaster(state) {
   state.addEntity(aiPaddleSideCldr);
   state.addEntity(aiPaddleCtrl);
   state.addEntity(aiPaddleView);
+  state.addEntity(humanPenetrationSolver);
+  state.addEntity(aiPenetrationSolver);
   
   /*
    * 
    */
-   
+  
+  this.set__PlayingField(playingField);
   this.set__Ball(ball);
   this.set__HumanPaddle(humanPaddle);
   this.set__AIPaddle(aiPaddle);
@@ -67,7 +86,7 @@ GameMaster.prototype = {
     
     var pointScored = false;
     
-    if (ballLeft <= field.getLeft()) {
+    if (ballLeft <= field.getX()) {
       this.__pointToHuman();
       pointScored = true;
     }
@@ -96,17 +115,20 @@ GameMaster.prototype = {
     var humanPaddle = this.get__HumanPaddle();
     var aiPaddle = this.get__AIPaddle();
     
-    ball.setX(300);
-    ball.setY(200);
-    
-    humanPaddle.setX(25);
-    humanPaddle.setY(100);
-    
-    aiPaddle.setX(550);
-    aiPaddle.setY(100);
+    ball.reset();
+    humanPaddle.reset();
+    aiPaddle.reset();
+  },
+
+  getHumanScore: function () {
+  	return this.get__humanScore();
+  },
+
+  getAiScore: function () {
+  	return this.get__aiScore();
   },
   
-  getDependencies: function (outList) {
+  getDependencies: function (state, outList) {
     outList.push(this.get__Ball());
     outList.push(this.get__HumanPaddle());
     outList.push(this.get__AIPaddle());
