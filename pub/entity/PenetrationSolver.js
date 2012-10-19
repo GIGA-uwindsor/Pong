@@ -22,14 +22,17 @@ PenetrationSolver.prototype = {
     // paddle centre to ball centre unit vector
     var bpx = ball.getX() - paddle.getX() - paddle.getWidth() / 2.0;
     var bpy = ball.getY() - paddle.getY() - paddle.getHeight() / 2.0;
+    // a bit hacky, but prefer pushing out the left or right if it is
+    // closer. this works fine for pong.
+    if (Math.abs(bpx) < Math.abs(bpy)) bpy = 0;
     var n = Math.sqrt(bpx*bpx + bpy*bpy);
-    bpx = bpx / n;
-    bpy = bpy / n;
+    var bpx = bpx / n;
+    var bpy = bpy / n;
     
     var min_x = ball.getX();
     var min_y = ball.getY();
     // initial guess
-    var m = ball.getRadius() * 2;
+    var m = n + ball.getRadius();
     var max_x = min_x + m * bpx;
     var max_y = min_y + m * bpy;
     
@@ -42,7 +45,7 @@ PenetrationSolver.prototype = {
       
       if (this.__ballIntersectsPaddle()) {
         min_x = mid_x;
-        min_y = min_y;
+        min_y = mid_y;
       }
       else {
         max_x = mid_x;
