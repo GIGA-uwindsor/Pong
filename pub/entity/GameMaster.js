@@ -18,8 +18,8 @@ function GameMaster(state) {
   var padHgt = 100;
   var padY = fieldRct.getY() + (fieldRct.getHeight() - padHgt)/2;
   
-  var humanPaddle = new Paddle( fieldRct.getX()     + padWid,     padY, padWid, padHgt);
-  var aiPaddle = new Paddle(    fieldRct.getRight() - (padWid*2), padY, padWid, padHgt);
+  var humanPaddle = new Paddle( fieldRct.getX()     + padWid,     padY, padWid, padHgt*2);
+  var aiPaddle = new Paddle(    fieldRct.getRight() - (padWid*2), padY, padWid, padHgt/2);
   
   var ballSideCldr = new BallSideCollider(ball, playingField);
   
@@ -34,7 +34,7 @@ function GameMaster(state) {
     new BallPaddleCollider(ball, aiPaddle);
   var aiPaddleSideCldr =
     new PaddleSideCollider(aiPaddle, playingField);
-  var aiPaddleCtrl = new AIPaddleController(ball, aiPaddle);
+  var aiPaddleCtrl = new AIPaddleController(ball, aiPaddle, playingField);
   var aiPaddleView = new PaddleView(aiPaddle, "#00FF00");
   
   var humanPenetrationSolver
@@ -87,11 +87,11 @@ GameMaster.prototype = {
     var pointScored = false;
     
     if (ballLeft <= field.getX()) {
-      this.__pointToHuman();
+      this.__pointToAI();
       pointScored = true;
     }
     if (ballRight >= field.getRight()) {
-      this.__pointToAI();
+      this.__pointToHuman();
       pointScored = true;
     }
     
