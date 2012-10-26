@@ -35,12 +35,22 @@ BallSideCollider.prototype = {
     var right   = x + r;
     var bottom  = y + r;
 
-    // Bounce off of the walls
+    /*
+    // Bounce off of the left/right walls
     if ( left < field.getX() || right > field.getWidth() ) // left/right
+    {
       ball.mulVelocityX( (left < field.getX() ? 1 : -1) );
+    }*/
 
-    if ( top < field.getY() || bottom > field.getHeight() ) // top/bottom
+    // Bounce off of the top/bottom walls
+    if ( top < field.getY() || bottom > field.getBottom() ) // top/bottom
+    {
       ball.mulVelocityY( (top < field.getY() ? 1 : -1) );
+      if ( top < field.getY() )
+        ball.setY( field.getY() + (field.getY() - top) + r );
+      else
+        ball.setY( field.getBottom() - (bottom - field.getBottom()) - r );
+    }
   },
   
 }
